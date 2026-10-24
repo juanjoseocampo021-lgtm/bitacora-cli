@@ -2,7 +2,7 @@ const hash = require('object-hash');
 const os = require('os');
 const path = require('path');
 const almacen = require('./almacen');
-const fechas = require('./fechas');
+const fechas = require('fechas-bitacora-juanjoseocampo');
 
 function generarId(texto) {
     return hash(texto).slice(0, 8);
