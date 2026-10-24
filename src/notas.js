@@ -1,4 +1,6 @@
 const hash = require('object-hash');
+const os = require('os');
+const path = require('path');
 const almacen = require('./almacen');
 const fechas = require('./fechas');
 
@@ -94,4 +96,34 @@ function borrar(id) {
     return { ok: true, mensaje: `Nota [${id}] eliminada.` };
 }
 
-module.exports = { agregar, listar, buscar, borrar };
+function respaldar() {
+    const marcaDeTiempo = fechas.getTimeStamp();
+    const destino = almacen.respaldarNotas(marcaDeTiempo);
+    return { ok: true, mensaje: `Respaldo creado en: ${destino}` };
+}
+
+function exportar(carpetaDestino) {
+    const destino = carpetaDestino || os.homedir();
+
+    if (!path.isAbsolute(destino)) {
+        return {
+            ok: false,
+            mensaje: `La ruta "${destino}" no es absoluta. Ejemplo: exportar C:\\Users\\tu-usuario\\Desktop`,
+        };
+    }
+
+    if (!almacen.carpetaExiste(destino)) {
+        return { ok: false, mensaje: `La carpeta "${destino}" no existe. No se movió nada.` };
+    }
+
+    const notas = almacen.leerNotas();
+    const lineas = notas.map(formatearNota);
+    const texto = `Bitácora de aprendizaje (${notas.length} notas)\n\n${lineas.join('\n')}\n`;
+
+    const origen = almacen.escribirExportacion(texto);
+    const final = almacen.moverArchivo(origen, path.join(destino, 'exportacion.txt'));
+
+    return { ok: true, mensaje: `Exportación movida a: ${final}` };
+}
+
+module.exports = { agregar, listar, buscar, borrar, respaldar, exportar };

@@ -10,7 +10,11 @@ Comandos:
   listar [N]                     Muestra las últimas N notas (por defecto 5)
   buscar <palabra>               Busca notas que contengan la palabra
   borrar <id>                    Elimina la nota con ese id
+  respaldar                      Copia las notas a la carpeta respaldos/
+  exportar [carpeta-absoluta]    Mueve un archivo con todas las notas a la carpeta (por defecto, tu carpeta personal)
   ayuda                          Muestra este mensaje`;
+
+
 
 function ejecutar(comando, argumentos) {
     switch (comando) {
@@ -22,6 +26,10 @@ function ejecutar(comando, argumentos) {
             return notas.buscar(argumentos[0]);
         case 'borrar':
             return notas.borrar(argumentos[0]);
+        case 'respaldar':
+            return notas.respaldar();
+        case 'exportar':
+            return notas.exportar(argumentos[0]);
         case 'ayuda':
             return { ok: true, mensaje: AYUDA };
         default:
