@@ -14,5 +14,8 @@
   "type": "commonjs",
   "scripts": {
     "start": "node src/index.js"
+  },
+  "dependencies": {
+    "object-hash": "^3.0.0"
   }
 }
